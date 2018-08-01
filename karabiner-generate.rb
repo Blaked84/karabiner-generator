@@ -9,20 +9,28 @@ require 'json'
 require_relative 'karabiner.rb'
 
 def km(macro)
-    "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"" + macro + "\"'"
+  "osascript -e 'tell application \"Keyboard Maestro Engine\" to do script \"" + macro + "\"'"
+end
+
+def open_app(app_name)
+  "open -a '#{app_name}'"
 end
 
 def alfred(trigger, workflow)
-    "osascript -e 'tell application \"Alfred 3\" to run trigger \"" + trigger + "\" in workflow \"" + workflow + "\" with argument \"\"'"
+  "osascript -e 'tell application \"Alfred 3\" to run trigger \"" + trigger + "\" in workflow \"" + workflow + "\" with argument \"\"'"
 end
 
 def main
   sticky_e()
   print ','
   sticky_q()
+  print ','
+  sticky_f()
+  print ','
+  sticky_a()
 end
 
-# TODO: alphabetize all manipulators based on trigger key. can use vim magic for it
+# TODO: alphabetize all manipulators based on trigger key. can use vim magic for iteW
 
 # TODO: add HS calls. do it in background
 # hammerspoon://openConsole -> opens console
@@ -111,29 +119,17 @@ def sticky_q()
   )
 end
 
-def sticky_w()
+def sticky_f()
   puts JSON.pretty_generate(
-        'description' => 'gen: sticky w - apps',
+        'description' => 'gen: sticky f - apps',
         'manipulators' => [
-            shell('w', 'k', km("open: safari")),
-            shell('w', 'a', km("open: dash")),
-            shell('w', 'i', km("open: firefox dev")),
-            shell('w', 'n', km("open: bee")),
-            shell('w', 'h', km("open: xcode")),
-            shell('w', 't', km("open: console")),
-            shell('w', 'period', km("open: karabiner elements")),
-            shell('w', 'comma', km("open: spotify")),
-            shell('w', 'v', km("open: mindnode")),
-            shell('w', 'c', km("open: script editor")),
-            shell('w', 'b', km("open: bettertouchtool")),
-            shell('w', 'r', km("open: fantastical")),
-            shell('w', 'e', km("open: trello")),
-            shell('w', 'g', km("open: snippetslab")),
-            shell('w', 'f', km("open: 2do")),
-            shell('w', 'j', km("open: iterm")),
-            shell('w', 'l', km("open: sublime text")),
-            shell('w', 'semicolon', km("open: vs code")),
-            shell('w', 'o', km("open: keyboard maestro")),
+          key("f", "j", "spacebar", ["command"]), # trigger alfred
+          key("f", "u", "f", ["fn"]), # trigger Context
+          key("f", "i", "i", ["fn"]), # trigger alfred snippet picker
+          key("f", "m", "p", ["shift", "option"]), # trigger alfred snippet picker
+          shell('f', 's', open_app('Visual Studio Code')),
+          shell('f', 'd', open_app('Google Chrome')),
+          shell('f', 'e', open_app('iTerm')),
         ].flatten,
   )
 end
@@ -204,102 +200,6 @@ def sticky_e()
   )
 end
 
-def sticky_r()
-  puts JSON.pretty_generate(
-        'description' => 'gen: sticky r - apps',
-        'manipulators' => [
-          key('r', 'space', 's', ["shift", "control"]), # web searches with selected text
-          shell('r', '1', km('open: hazel')),
-          shell('r', 'u', km('open: actual')),
-          shell('r', 'l', km('open: ulysses')),
-          shell('semicolon', 'semicolon', km('open: paw')),
-          shell('r', 'slash', km('open: little snitch configuration')),
-          shell('r', 'tab', km('open: flume')),
-          shell('r', 't', km('open: transmission')),
-          shell('r', 'p', km('open: paprika recipe manager')),
-          shell('r', 'b', km('edit: edit keyboard shortcuts')),
-          shell('r', 'comma', km('open: day one')),
-          shell('r', 'm', km('open: marked')),
-          shell('r', 'caps_lock', km('open: magic number')),
-          shell('r', 's', km('open: itunes')),
-          shell('r', 'a', km('open: alfred preferences')),
-          shell('r', 'i', km('open: pixave')),
-          shell('r', 'e', km('open: reeder')),
-          shell('r', 'j', km('open: dictionary')),
-          shell('r', 'h', km('open: hammerspoon')),
-          shell('r', 'k', km('open: pdf expert')),
-          shell('r', 'w', km('open: 1password')),
-          shell('r', 'v', km('open: keychain access')),
-          shell('r', 'n', km('open: timing')),
-          key("r", "o", "f10", ["option"], ["control"]), # open typinator
-        ].flatten,
-  )
-end
-
-def sticky_t()
-  puts JSON.pretty_generate(
-        'description' => 'gen: sticky t - handy actions',
-        'manipulators' => [
-          shell('t', 'i', km('g: new snippetslab snippet')),
-          shell('t', 'o', km('g: new mindnode file')),
-          shell('t', 'j', km('g: goto km group of current app')),
-          shell('t', 'k', km('g: goto km group of current app from picklist')),
-          key("t", "spacebar", "r", ["shift", "option", "command"]), # google translate selected text
-          shell("t", "period", km('g: stop all macros')),
-          key("t", "s", "9", ["command", "control"]), # little snitch network monitor
-          shell("t", "a", alfred('clean', 'nikivi.clean.folders')),
-          shell("t", "y", alfred('gitUpdate', 'net.deanishe.alfred-git-repos')),
-          shell('t', 'w', km('per: pass')),
-        ].flatten,
-  )
-end
-
-def sticky_y()
-  puts JSON.pretty_generate(
-        'description' => 'gen: sticky y - websites',
-        'manipulators' => [
-          shell('y', 'b', km('w: brilliant')),
-          shell('y', 'd', km('w: pinboard')),
-          shell('y', 'h', km('w: unsplash')),
-        ].flatten,
-  )
-end
-
-def sticky_u()
-  puts JSON.pretty_generate(
-        'description' => 'gen: sticky u - websites',
-        'manipulators' => [
-          shell('u', 'e', km('w: repl')),
-          shell('u', 'd', km('w: codepen')),
-          shell('u', 'a', km('w: arxiv')),
-          shell('u', 'l', km('w: bitly')),
-          shell('u', 'x', km('w: dropbox')),
-          shell('u', 'v', km('w: twitch')),
-          shell('u', 'b', km('w: gitbook')),
-          shell('u', 'r', km('w: google drive')),
-          shell('u', 'h', km('w: khan academy')),
-          shell('u', 'spacebar', km('g: open url in safari')),
-          shell('u', 't', km('w: github trending')),
-          shell('u', 'z', km('w: MDN')),
-          shell('u', 'y', km('w: netlify')),
-          shell('u', 'g', km('w: kaggle')),
-          shell('u', 'i', km('w: wakatime')),
-          shell('u', 'w', km('w: AWS')),
-          shell('u', 's', km('w: NPM')),
-        ].flatten,
-  )
-end
-
-# TODO: finish
-def sticky_i()
-  puts JSON.pretty_generate(
-        'description' => 'gen: sticky ',
-        'manipulators' => [
-            shell("i", "b", km('i: TODO:'))
-        ].flatten,
-  )
-end
-
 def sticky_a()
   puts JSON.pretty_generate(
         'description' => 'gen: sticky a - ctrl',
@@ -362,15 +262,6 @@ def sticky_a()
           key("a", "8", "8", ["control"]),
           key("a", "9", "9", ["control"]),
           key("a", "0", "0", ["control"]),
-        ].flatten,
-  )
-end
-
-# TODO: finish 
-def sticky_s()
-  puts JSON.pretty_generate(
-        'description' => 'gen: sticky s - essential',
-        'manipulators' => [
         ].flatten,
   )
 end
